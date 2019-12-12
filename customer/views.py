@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 import requests, json
 from customer.forms import TournamentJoin
 
-api_key = '6mYgSqoG0PY7p4Eot1PjmI5urgZpl9'
+api_key = 'F0DcZj54o0duOEIsjDevNzWJnI0LCU'
 
 
 def get_user_order(request):

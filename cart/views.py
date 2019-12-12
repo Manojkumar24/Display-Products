@@ -1,5 +1,6 @@
 import datetime
 
+import requests
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -9,7 +10,9 @@ from django.core.mail import send_mail, EmailMessage
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
+from rest_framework.utils import json
 
+from customer.views import api_key
 from cart.extra import generate_order_id
 from cart.models import OrderItem, Order, Transaction
 from customer.forms import Contact_Form
@@ -106,19 +109,29 @@ def get_user_details(request):
 
             customer = order_to_purchase.owner.Customer.username
 
-            order_to_purchase.save()
 
             order_items = order_to_purchase.items.all()
-
             sportshub_order_items = []
             flag = 0
+            url = 'http://127.0.0.1:8000/cart/get_logs/?api_key=' + api_key
             for item in order_items:
                 ven = item.vendor.all()[0]
                 # print('The vendor is', ven)
                 if str(ven) == 'sportshub':
                     flag = 1
                     # print(ven)
-                    print(request.user, item.product.prod_name, item.product.category.cat_name, item.product.cost)
+                    print(request.user, item.product.prod_name, item.product.cost,
+                          item.qty)
+
+                    data = json.dumps(
+                        {'user': request.user.username,
+                         'product': item.product.prod_name,
+                         'cost': item.product.cost,
+                         'qty': item.qty
+                         })
+                    print('Data Sent')
+                    requests.post(url=url, data=data)
+
                     sportshub_order_items.append({item.product.prod_name: item.qty})
                     # print(sportshub_order_items)
                 ven_qty = VendorQty.objects.get(Vendor=ven, product=item.product)
@@ -155,7 +168,7 @@ def get_user_details(request):
                                       success=True)
 
             transaction.save()
-
+            order_to_purchase.save()
             address = user_form.address
             phone_num = user_form.phone_number
 
