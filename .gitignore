@@ -2,4 +2,4 @@
 /.idea
 /venv
 /static/sports/
-/static/sports/
+db.sqlite3

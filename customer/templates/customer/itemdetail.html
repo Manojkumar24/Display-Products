@@ -6,7 +6,7 @@
         $(".cart-add").click(function () {
             let span = $(this).parent();
             var vendorid = parseInt(document.getElementById("select_vendor").value)
-            console.log(vendorid)
+            console.log(vendorid);
             $.ajax({
                 url: span.attr("add_url"),
                 data: {vendorid: vendorid},
