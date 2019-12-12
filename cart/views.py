@@ -1,18 +1,20 @@
+import datetime
+
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
-from django.urls import reverse
+from django.core.mail import send_mail, EmailMessage
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.template.loader import render_to_string
+from django.urls import reverse
+
+from cart.extra import generate_order_id
 from cart.models import OrderItem, Order, Transaction
 from customer.forms import Contact_Form
-from vendor.models import Product, VendorQty
 from customer.models import CustomerProfile
-from cart.extra import generate_order_id
-import datetime
-from django.core.mail import send_mail, EmailMessage
-from django.conf import settings
-from django.template.loader import render_to_string
+from vendor.models import Product, VendorQty
 
 
 def get_user_pending_order(request):
@@ -112,13 +114,13 @@ def get_user_details(request):
             flag = 0
             for item in order_items:
                 ven = item.vendor.all()[0]
-                print('The vendor is', ven)
+                # print('The vendor is', ven)
                 if str(ven) == 'sportshub':
                     flag = 1
-                    print(ven)
-
+                    # print(ven)
+                    print(request.user, item.product.prod_name, item.product.category.cat_name, item.product.cost)
                     sportshub_order_items.append({item.product.prod_name: item.qty})
-                    print(sportshub_order_items)
+                    # print(sportshub_order_items)
                 ven_qty = VendorQty.objects.get(Vendor=ven, product=item.product)
 
                 # print(ven_qty.qty)
@@ -130,7 +132,7 @@ def get_user_details(request):
             user_form = user_form.save()
 
             if len(sportshub_order_items) > 0:
-                print('An order has been placed')
+                # print('An order has been placed')
                 current_site = get_current_site(request)
                 mail_subject = 'SportsHub Order Placed'
                 message = render_to_string('cart/send_email.html', {

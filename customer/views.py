@@ -14,6 +14,8 @@ from django.contrib.auth.decorators import login_required
 import requests, json
 from customer.forms import TournamentJoin
 
+api_key = '6mYgSqoG0PY7p4Eot1PjmI5urgZpl9'
+
 
 def get_user_order(request):
     user_profile = get_object_or_404(CustomerProfile, Customer=request.user)
@@ -111,7 +113,7 @@ def Search_Results(request):
 
 
 def list_categories(request):
-    url = 'http://127.0.0.1:8000/shopping/categories_list'
+    url = 'http://127.0.0.1:8000/shopping/categories_list/?api_key=' + api_key
     response = requests.get(url)
     categories = response.json()
 
@@ -120,7 +122,7 @@ def list_categories(request):
             c = Category.objects.create(cat_name=category['cat_name'])
             c.save()
 
-    url = 'http://127.0.0.1:8000/shopping/product_list'
+    url = 'http://127.0.0.1:8000/shopping/product_list/?api_key=' + api_key
     response = requests.get(url)
     products = response.json()
 
