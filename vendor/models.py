@@ -20,7 +20,7 @@ class Product(models.Model):
     stock = models.IntegerField(default=0)
     cost = models.IntegerField(default=0)
     brand = models.CharField(max_length=150, blank=True)
-    prod_pic = models.ImageField(upload_to='static/vendor/images/   ', blank=True)
+    prod_pic = models.ImageField(upload_to='static/vendor/images', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
