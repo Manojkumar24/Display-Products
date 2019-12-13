@@ -16,7 +16,6 @@ from customer.forms import TournamentJoin
 
 api_key = 'GQIJ8cdB0aqCVM7y449lNgsquxP2w6'
 
-
 def get_user_order(request):
     user_profile = get_object_or_404(CustomerProfile, Customer=request.user)
     ord = Order.objects.filter(owner=user_profile, is_ordered=True)
