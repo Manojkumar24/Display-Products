@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 import requests, json
 from customer.forms import TournamentJoin
 
-api_key = 'F0DcZj54o0duOEIsjDevNzWJnI0LCU'
+api_key = 'GQIJ8cdB0aqCVM7y449lNgsquxP2w6'
 
 
 def get_user_order(request):
@@ -139,7 +139,12 @@ def list_categories(request):
             vendor = VendorQty.objects.get_or_create(Vendor=u, product=p)[0]
             vendor.qty = product['stock']
             vendor.save()
-
+        else:
+            u = User.objects.get(username='sportshub')
+            instance = Product.objects.get(category=c, prod_name=product['prod_name'])
+            vendor = VendorQty.objects.get_or_create(Vendor=u, product=instance)[0]
+            vendor.qty = product['stock']
+            vendor.save()
     all_categories = Category.objects.all()
     is_vendor = False
     if request.user.is_authenticated:

@@ -18,6 +18,7 @@ from cart.models import OrderItem, Order, Transaction
 from customer.forms import Contact_Form
 from customer.models import CustomerProfile
 from vendor.models import Product, VendorQty
+from customer.views import api_key
 
 
 def get_user_pending_order(request):
@@ -109,7 +110,6 @@ def get_user_details(request):
 
             customer = order_to_purchase.owner.Customer.username
 
-
             order_items = order_to_purchase.items.all()
             sportshub_order_items = []
             flag = 0
@@ -130,7 +130,7 @@ def get_user_details(request):
                          'qty': item.qty
                          })
                     print('Data Sent')
-                    requests.post(url=url, data=data)
+                    print(requests.post(url=url, data=data))
 
                     sportshub_order_items.append({item.product.prod_name: item.qty})
                     # print(sportshub_order_items)
